@@ -54,12 +54,11 @@ La capa `Metrica.Application` conserva la organización base del `UserService`: 
 
 Después de clonar el repositorio, configura los valores locales mediante User Secrets. Estos valores no se guardan en Git:
 
-```powershell
-dotnet user-secrets set "Jwt:Key" "<CLAVE_JWT_DE_MINIMO_32_CARACTERES>" --project src/Metrica.Api
-dotnet user-secrets set "Auth:AdminEmail" "<CORREO_ADMIN>" --project src/Metrica.Api
-dotnet user-secrets set "Auth:AdminPassword" "<CONTRASENA_ADMIN>" --project src/Metrica.Api
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<CADENA_DE_CONEXION_SQL_SERVER>" --project src/Metrica.Api
-```
+Ubicar el archivo appsettings.Development.json y setear las siguientes variables:
+-ConnectionStrings:DefaultConnection : "TU_CADENA_DE_CONEXION"
+-JWT:Key : "################################"
+-Auth:AdminEmail : "admin@metrica.local"
+-Auth:AdminPassword : "retometrica"
 
 La conexión, la clave JWT y las credenciales no están incluidas en `appsettings.json` ni en `appsettings.Development.json`. La aplicación usa el nombre de base que configures y ejecuta migraciones automáticamente en Development.
 
@@ -74,8 +73,6 @@ Si prefieres crear la base manualmente, ejecuta [`database/schema.sql`](database
 ```powershell
 dotnet ef database update --project src/Metrica.Infrastructure/Metrica.Infrastructure.csproj --startup-project src/Metrica.Api/Metrica.Api.csproj
 ```
-
-Las migraciones utilizan la configuración del proyecto `Metrica.Api` como única fuente de conexión; no se mantiene una fábrica de contexto duplicada.
 
 Ejecuta la API:
 
