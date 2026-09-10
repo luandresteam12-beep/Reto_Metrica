@@ -55,10 +55,18 @@ La capa `Metrica.Application` conserva la organización base del `UserService`: 
 Después de clonar el repositorio, configura los valores locales mediante User Secrets. Estos valores no se guardan en Git:
 
 ## Ubicar el archivo appsettings.Development.json y setear las siguientes variables:
--ConnectionStrings:DefaultConnection : "TU_CADENA_DE_CONEXION"
--JWT:Key : "################################"
--Auth:AdminEmail : "admin@metrica.local"
--Auth:AdminPassword : "retometrica"
+
+  "ConnectionStrings": {
+    "DefaultConnection": "TU_CADENA_DE_CONEXION"
+  },
+  "Jwt": {
+    "Key": "TU_CLAVE_JWT_DE_MINIMO_32_CARACTERES"
+  },
+  "Auth": {
+    "AdminEmail": "admin@metrica.local",
+    "AdminPassword": "TU_CONTRASENA_LOCAL"
+  }
+}
 
 Tener en cuenta que estas últimas dos credenciales debe ingresar desde el cliente para que sea valida la sesión ya que no se maneja persistencia de los usuarios.
 
