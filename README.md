@@ -60,6 +60,8 @@ Ubicar el archivo appsettings.Development.json y setear las siguientes variables
 -Auth:AdminEmail : "admin@metrica.local"
 -Auth:AdminPassword : "retometrica"
 
+Tener en cuenta que estas últimas dos credenciales debe ingresar desde el cliente para que sea valida la sesión ya que no se maneja persistencia de los usuarios.
+
 La conexión, la clave JWT y las credenciales no están incluidas en `appsettings.json` ni en `appsettings.Development.json`. La aplicación usa el nombre de base que configures y ejecuta migraciones automáticamente en Development.
 
 Puedes comprobar la configuración local con:
