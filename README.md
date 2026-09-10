@@ -52,36 +52,41 @@ La capa `Metrica.Application` conserva la organización base del `UserService`: 
 
 ## Configuración del backend
 
-Después de clonar el repositorio, configura los valores locales mediante User Secrets. Estos valores no se guardan en Git:
+Después de clonar el repositorio, configura los valores locales en `appsettings.Development.json`. Este archivo no se guarda en Git:
 
-Ubicar el archivo appsettings.Development.json y setear las siguientes variables:
--ConnectionStrings:DefaultConnection : "TU_CADENA_DE_CONEXION"
--JWT:Key : "################################"
--Auth:AdminEmail : "admin@metrica.local"
--Auth:AdminPassword : "retometrica"
+Ubica `backend/src/Metrica.Api/appsettings.Development.example.json`, crea una copia llamada `appsettings.Development.json` y completa estos valores localmente:
 
-La conexión, la clave JWT y las credenciales no están incluidas en `appsettings.json` ni en `appsettings.Development.json`. La aplicación usa el nombre de base que configures y ejecuta migraciones automáticamente en Development.
-
-Puedes comprobar la configuración local con:
-
-```powershell
-dotnet user-secrets list --project src/Metrica.Api
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "TU_CADENA_DE_CONEXION"
+  },
+  "Jwt": {
+    "Key": "TU_CLAVE_JWT_DE_AL_MENOS_32_CARACTERES"
+  },
+  "Auth": {
+    "AdminEmail": "admin@metrica.local",
+    "AdminPassword": "TU_CONTRASENA_LOCAL"
+  }
+}
 ```
 
-Si prefieres crear la base manualmente, ejecuta [`database/schema.sql`](database/schema.sql). Para aplicar migraciones desde EF Core:
+La conexión, la clave JWT y las credenciales no deben subirse al repositorio. El archivo `appsettings.Development.json` está excluido mediante `.gitignore`. La aplicación ejecuta las migraciones automáticamente en Development mediante `Database.MigrateAsync()` cuando `Database:AutoMigrate` está habilitado.
+
+Desde `backend/`, la aplicación puede aplicar la migración automáticamente al iniciar. Como alternativa manual:
 
 ```powershell
-dotnet ef database update --project src/Metrica.Infrastructure/Metrica.Infrastructure.csproj --startup-project src/Metrica.Api/Metrica.Api.csproj
+dotnet ef database update --project src/Metrica.Infrastructure/Metrica.Infrastructure.csproj --startup-project src/Metrica.Api/Metrica.Api.csproj -- --environment Development
 ```
 
-Ejecuta la API:
+Ejecuta la API desde `backend/` usando el perfil HTTP de desarrollo:
 
 ```powershell
-dotnet run --project src/Metrica.Api/Metrica.Api.csproj
+dotnet run --project src/Metrica.Api/Metrica.Api.csproj --launch-profile http
 ```
 
-- Swagger: `https://localhost:7248/swagger`
-- API: `https://localhost:7248`
+- Swagger: `http://localhost:5248/swagger`
+- API: `http://localhost:5248`
 - Configura el correo y contraseña administrativos que usarás localmente. Estos valores no se almacenan en el repositorio.
 
 ## Configuración del frontend
@@ -89,7 +94,7 @@ dotnet run --project src/Metrica.Api/Metrica.Api.csproj
 Desde `frontend/`:
 
 ```powershell
-npm install
+npm ci
 Copy-Item .env.example .env
 npm run dev
 ```
@@ -152,7 +157,7 @@ npm run lint
 
 Con la API y el frontend levantados, verifica este flujo mínimo:
 
-1. Iniciar sesión con el correo y contraseña configurados en User Secrets y confirmar que se recibe un JWT.
+1. Iniciar sesión con el correo y contraseña configurados en `appsettings.Development.json` y confirmar que se recibe un JWT.
 2. Intentar acceder a pedidos sin autenticación y confirmar `401 Unauthorized`.
 3. Crear un pedido válido y comprobar la respuesta `201 Created`.
 4. Editar el pedido y comprobar la respuesta `200 OK`.
@@ -183,7 +188,7 @@ SELECT * FROM dbo.__EFMigrationsHistory;
 
 ## Decisiones de seguridad
 
-- La cadena de conexión, la clave JWT y las credenciales de `Auth` se configuran mediante User Secrets o variables de entorno; nunca deben subirse al repositorio.
+- La cadena de conexión, la clave JWT y las credenciales de `Auth` se configuran en el `appsettings.Development.json` local, excluido mediante `.gitignore`; nunca deben subirse al repositorio.
 - El token se mantiene en `sessionStorage` y se elimina cuando expira la sesión; el backend siempre es la autoridad.
 - CORS acepta únicamente los orígenes configurados.
 - El backend no retorna ni persiste hashes de usuarios; la única identidad de acceso se configura fuera de la tabla `Pedidos`.

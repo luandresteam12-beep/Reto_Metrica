@@ -20,4 +20,5 @@ secrets.json
 *.key
 **/appsettings.Local.json
 **/appsettings.*.local.json
+**/appsettings.Development.json
 .DS_Store
