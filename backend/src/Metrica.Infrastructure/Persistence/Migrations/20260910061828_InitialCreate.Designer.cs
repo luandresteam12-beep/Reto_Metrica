@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Metrica.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(MetricaDbContext))]
-    [Migration("20260910031006_InitialCreate")]
+    [Migration("20260910061828_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
